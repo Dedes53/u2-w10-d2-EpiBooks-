@@ -9,34 +9,42 @@ const CommentArea = (props) => {
   const [comments, setComments] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [firstLoad, setFirstLoad] = useState(true)
 
 
   useEffect(() => {
-    setIsLoading(true)
 
-    fetch('https://striveschool-api.herokuapp.com/api/comments/' + props.asin, {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg5ZjQwNjI4NzNjYjAwMTUwZjAyOGUiLCJpYXQiOjE3NzA3Mjg4OTAsImV4cCI6MTc3MTkzODQ5MH0.UQ_2FPPUSwTlJvbw3eYi7VSPpgpsIZj4EFNJO5yhyeA"
-      }
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error('Qualcosa è andato storto')
+    setIsLoading(true);
+
+    if (firstLoad) {
+      setFirstLoad(false);
+      setIsLoading(false);
+      return;
+    } else {
+      fetch('https://striveschool-api.herokuapp.com/api/comments/' + props.asin, {
+        headers: {
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg5ZjQwNjI4NzNjYjAwMTUwZjAyOGUiLCJpYXQiOjE3NzA3Mjg4OTAsImV4cCI6MTc3MTkzODQ5MH0.UQ_2FPPUSwTlJvbw3eYi7VSPpgpsIZj4EFNJO5yhyeA"
         }
       })
-      .then((data) => {
-        setComments(data)
-        setIsLoading(false)
-        setIsError(false)
-      })
-      .catch((error) => {
-        console.log(error)
-        setIsLoading(false)
-        setIsError(true)
-      })
-  }, [props.asin]) // ← Solo props.asin nelle dipendenze
+        .then((response) => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            throw new Error('Qualcosa è andato storto')
+          }
+        })
+        .then((data) => {
+          setComments(data)
+          setIsLoading(false)
+          setIsError(false)
+        })
+        .catch((error) => {
+          console.log(error)
+          setIsLoading(false)
+          setIsError(true)
+        })
+    }
+  }, [props.asin])
 
   return (
     <div className="text-center">

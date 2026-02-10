@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CommentList from './CommentList'
 import AddComment from './AddComment'
 import Loading from './Loading'
@@ -10,12 +10,10 @@ const CommentArea = (props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  // eslint-disable-next-line no-undef
-  useEffect(() => {
-    fetchComments
-  }, [props.asin])
 
-  const fetchComments = (props) => {
+  useEffect(() => {
+    setIsLoading(true)
+
     fetch('https://striveschool-api.herokuapp.com/api/comments/' + props.asin, {
       headers: {
         Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg5ZjQwNjI4NzNjYjAwMTUwZjAyOGUiLCJpYXQiOjE3NzA3Mjg4OTAsImV4cCI6MTc3MTkzODQ5MH0.UQ_2FPPUSwTlJvbw3eYi7VSPpgpsIZj4EFNJO5yhyeA"
@@ -38,7 +36,7 @@ const CommentArea = (props) => {
         setIsLoading(false)
         setIsError(true)
       })
-  }
+  }, [props.asin]) // ← Solo props.asin nelle dipendenze
 
   return (
     <div className="text-center">

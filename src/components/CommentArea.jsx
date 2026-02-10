@@ -44,7 +44,7 @@ const CommentArea = (props) => {
           setIsError(true)
         })
     }
-  }, [props.asin])
+  }, [props.asin, firstLoad])
 
   return (
     <div className="text-center">

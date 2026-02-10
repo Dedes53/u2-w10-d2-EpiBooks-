@@ -15,7 +15,7 @@ const CommentArea = (props) => {
   useEffect(() => {
 
     setIsLoading(true);
-
+    console.log(firstLoad)
     if (firstLoad) {
       setFirstLoad(false);
       setIsLoading(false);
@@ -44,7 +44,8 @@ const CommentArea = (props) => {
           setIsError(true)
         })
     }
-  }, [props.asin, firstLoad])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.asin])
 
   return (
     <div className="text-center">

@@ -4,23 +4,6 @@ import { Button, Form } from 'react-bootstrap'
 const AddComment = (props) => {
   const [comment, setComment] = useState('')
   const [rate, setRate] = useState(1)
-  const [elementId, setElementId] = useState(props.asin)
-
-  // eslint-disable-next-line no-undef
-  useEffect(() => {
-    setElementId(props.asin)
-  }, [props.asin])
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.asin !== this.props.asin) {
-  //     this.setState({
-  //       comment: {
-  //         ...this.state.comment,
-  //         elementId: this.props.asin,
-  //       },
-  //     })
-  //   }
-  // }
 
   const sendComment = async (e) => {
     e.preventDefault()
@@ -29,7 +12,11 @@ const AddComment = (props) => {
         'https://striveschool-api.herokuapp.com/api/comments',
         {
           method: 'POST',
-          body: JSON.stringify({ comment, rate, elementId }),
+          body: JSON.stringify({
+            comment,
+            rate,
+            elementId: props.asin
+          }),
           headers: {
             'Content-type': 'application/json',
             Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg5ZjQwNjI4NzNjYjAwMTUwZjAyOGUiLCJpYXQiOjE3NzA3Mjg4OTAsImV4cCI6MTc3MTkzODQ5MH0.UQ_2FPPUSwTlJvbw3eYi7VSPpgpsIZj4EFNJO5yhyeA"
@@ -38,16 +25,8 @@ const AddComment = (props) => {
       )
       if (response.ok) {
         alert('Recensione inviata!')
-        // this.setState({
-        //   comment: {
-        //     comment: '',
-        //     rate: 1,
-        //     elementId: this.props.asin,
-        //   },
-        // })
         setComment('')
         setRate(1)
-        setElementId(props.asin)
       } else {
         throw new Error('Qualcosa è andato storto')
       }
@@ -55,7 +34,6 @@ const AddComment = (props) => {
       alert(error)
     }
   }
-
 
   return (
     <div className="my-3">
@@ -66,16 +44,7 @@ const AddComment = (props) => {
             type="text"
             placeholder="Inserisci qui il testo"
             value={comment}
-            // {this.state.comment.comment}
-            onChange={(e) =>
-              // this.setState({
-              //   comment: {
-              //     ...this.state.comment,
-              //     comment: e.target.value,
-              //   },
-              // })
-              setComment(e.target.value)
-            }
+            onChange={(e) => setComment(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="mb-2">
@@ -83,15 +52,7 @@ const AddComment = (props) => {
           <Form.Control
             as="select"
             value={rate}
-            onChange={(e) =>
-              // this.setState({
-              //   comment: {
-              //     ...this.state.comment,
-              //     rate: e.target.value,
-              //   },
-              // })
-              setRate(e.target.value)
-            }
+            onChange={(e) => setRate(e.target.value)}
           >
             <option>1</option>
             <option>2</option>
@@ -106,7 +67,6 @@ const AddComment = (props) => {
       </Form>
     </div>
   )
-
 }
 
 export default AddComment
